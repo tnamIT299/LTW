@@ -1,0 +1,146 @@
+﻿@model Alazea.Models.HomeModel
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="alazea-portfolio-area section-padding-100-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Section Heading -->
+                <div class="section-heading text-center">
+                    <h2>OUR PORTFOLIO</h2>
+                    <p>Trịnh Thành Nam - CQ.62.CNTT</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="alazea-portfolio-filter">
+                    <div class="portfolio-filter">
+                        @foreach (var item in Model.ListPhanLoai)
+                        {
+                            var geturl = "https://localhost:44391/api/productAPI/?maloai=" + item.MaPhanLoai;
+                        <button class="btn">
+                            <a style="cursor:pointer" onclick="showProductByCategoty('@geturl')">@item.PhanLoaiChinh</a>
+                        </button>
+                      
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="displayProduct" class="row alazea-portfolio">
+            @foreach (var item in Model.ListSanPham)
+            {
+                <!-- Single Portfolio Area -->
+                <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item design home-design wow fadeInUp">
+                    <!-- Portfolio Thumbnail -->
+                    <div class="portfolio-thumbnail bg-img">
+                        <img src="~/Content/img/bg-img/@item.AnhDaiDien">
+                    </div>
+                    <!-- Portfolio Hover Text -->
+                    <div class="portfolio-hover-overlay">
+                        <a href="/sanphams/details/@item.MaSanPham" class="d-flex align-items-center justify-content-center" title="Portfolio 1">
+                            <div class="port-hover-text">
+                                <h3>@item.TenSanPham</h3>
+                                <h5>@item.DonGiaBanNhoNhat</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script src="~/Scripts/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="~/Scripts/js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="~/Scripts/js/bootstrap/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="~/Scripts/js/plugins/plugins.js"></script>
+    <!-- Active js -->
+    <script src="~/Scripts/js/active.js"></script>
+    @*comment stt-5 trong active.js*@
+
+    <script>
+        //function showProductByCategoty(geturl) {
+        //    var str = '';
+        //    $.ajax({
+        //        type: 'GET',
+        //        dataType: 'json',
+        //        url: geturl,
+        //        success: function (data) {
+        //            $.each(data, function (key, val) {
+        //                var linkImage = "../Content/img/bg-img/" + val.AnhDaiDien;
+        //                str += `<div class="col-12 col-sm-6 col-lg-3 single_portfolio_item design home-design wow fadeInUp">
+        //                        <!-- Portfolio Thumbnail -->
+        //                        <div class="portfolio-thumbnail bg-img">
+        //                            <img src="${linkImage}">
+        //                        </div>
+        //                        <!-- Portfolio Hover Text -->
+        //                        <div class="portfolio-hover-overlay">
+        //                            <a href="/sanphams/details/${val.MaSanPham}" class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 1">
+        //                                <div class="port-hover-text">
+        //                                    <h3>${val.TenSanPham}</h3>
+        //                                    <h5>${val.DonGiaBanNhoNhat}</h5>
+        //                                </div>
+        //                            </a>
+        //                        </div>
+        //                    </div>`
+        //            });
+        //            $('#displayProduct').html(str);
+        //        },
+        //        error: function (xhr) {
+        //            alert(xhr.reponseText);
+        //        }
+        //    });
+        //}
+    </script>
+
+
+
+   <script>
+       function showProductByCategoty(geturl) {
+           var str = '';
+           $.ajax({
+               type: 'GET',
+               dataType: 'json',
+               url: geturl,
+               success: function (data) {
+                   $.each(data, function (key, val) {
+                       var linkImage = "../Content/img/bg-img/" + val.AnhDaiDien;
+                       str += `<div class="col-12 col-sm-6 col-lg-3 single_portfolio_item design home-design wow fadeInUp">
+                             <!-- Portfolio Thumbnail -->
+                             <div class="portfolio-thumbnail bg-img">
+                                 <img src="${linkImage}">
+                             </div>
+                             <!-- Portfolio Hover Text -->
+                             <div class="portfolio-hover-overlay">
+                                 <a href="/sanphams/details/${val.MaSanPham}" class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 1">
+                                     <div class="port-hover-text">
+                                         <h3>${val.TenSanPham}</h3>
+                                         <h5>${val.DonGiaBanNhoNhat}</h5>
+                                     </div>
+                                 </a>
+                             </div>
+                         </div>`
+                   });
+                   $('#displayProduct').html(str);
+               },
+               error: function (xhr) {
+                   alert(xhr.reponseText);
+               }
+           });
+       }
+    </script>
+}
