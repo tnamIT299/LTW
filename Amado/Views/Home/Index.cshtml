@@ -1,0 +1,107 @@
+﻿@model Amado.Models.HomeModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<!-- Header Area Start -->
+<header class="header-area clearfix">
+    <!-- Close Icon -->
+    <div class="nav-close">
+        <i class="fa fa-close" aria-hidden="true"></i>
+    </div>
+    <!-- Logo -->
+    <div class="logo">
+        <a href="index.html"><img src="~/Content/img/core-img/logo.png" alt=""></a>
+    </div>
+    <!-- Amado Nav -->
+    <nav class="amado-nav">
+        <ul>
+            @foreach (var item in Model.ListPhanLoaiPhu)
+            {
+                var getUrl = "https://localhost:44398/api/ProductAPI/?maloai=" + @item.MaPhanLoaiPhu;
+
+                <li>
+                    <a class="active" style="cursor:pointer" onclick="showProductByCategory('@getUrl')">@item.TenPhanLoaiPhu</a>
+                </li>
+
+            }
+        </ul>
+    </nav>
+    <!-- Button Group -->
+    <div class="amado-btn-group mt-30 mb-100">
+        <a href="#" class="btn amado-btn mb-15">TRỊNH THÀNH NAM</a>
+        <a href="#" class="btn amado-btn active">CQ.62.CNTT</a>
+    </div>
+    <!-- Cart Menu -->
+    <div class="cart-fav-search mb-100">
+        <a href="cart.html" class="cart-nav"><img src="~/Content/img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
+        <a href="#" class="fav-nav"><img src="~/Content/img/core-img/favorites.png" alt=""> Favourite</a>
+        <a href="#" class="search-nav"><img src="~/Content/img/core-img/search.png" alt=""> Search</a>
+    </div>
+    <!-- Social Button -->
+    <div class="social-info d-flex justify-content-between">
+        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+        <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    </div>
+</header>
+<!-- Product Catagories Area Start -->
+<div id="displayProduct" class="products-catagories-area clearfix">
+    <div class="amado-pro-catagory clearfix">
+        @foreach (var item in Model.ListSanPham)
+        {
+            //Single Catagory
+            <div class="single-products-catagory clearfix">
+                <a href="/sanphams/details/@item.MaSanPham">
+                    <img src="~/Content/img/bg-img/@item.AnhDaiDien" alt="">
+                    @*//Hover Content*@
+                    <div class="hover-content">
+                        <div class="line"></div>
+                        <p>From @item.DonGiaBanNhoNhat</p>
+                        <h4>@item.TenSanPham</h4>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+<!-- Product Catagories Area End -->
+
+@section scripts{
+
+    <script>
+        function showProductByCategory(getUrl) {
+            let str = `<div class="d-flex flex-wrap">`;
+            $.ajax({
+                type: 'GET',
+                url: getUrl,
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function (key, val) {
+                        var linkImage = "../Content/img/bg-img/" + val.AnhDaiDien;
+                        str += `<div class="single-products-catagory clearfix">
+                                                     <a href="/sanphams/details/${val.MaSanPham}">
+                                                         <img src="${linkImage}" alt="">
+                                                         <div class="hover-content">
+                                                             <div class="line"></div>
+                                                             <p>From ${val.DonGiaBanNhoNhat}$ </p>
+                                                             <h4>${val.TenSanPham}</h4>
+                                                         </div>
+                                                     </a>
+                                                 </div>`;
+                    });
+                    str += `</div>`;
+                    $('#displayProduct').html(str);
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        }
+    </script>
+
+} 
