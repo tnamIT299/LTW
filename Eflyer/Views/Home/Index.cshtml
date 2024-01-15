@@ -1,0 +1,92 @@
+﻿@model Eflyer.Models.HomeModel
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- fashion section start -->
+<div class="fashion_section">
+    <div id="main_slider" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container">
+                    <h1 class="fashion_taital">Man & Woman Fashion</h1>
+                    <div class="d-flex flex-wrap justify-content-center justify-content-lg-around">
+                        @foreach (var item in Model.ListPhanLoaiPhu)
+                        {
+                            var geturl = "https://localhost:44382/api/productapi/?maloai=" + item.MaPhanLoaiPhu;
+                            <div class="d-flex flex-wrap">
+                                <h2 class="mr-2">
+                                <a style="cursor:pointer" onclick="showByCategory('@geturl')">@item.TenPhanLoaiPhu</a>
+                                </h2>
+                            </div>
+                        }
+                    </div>
+                        <div id="displayProduct" class="fashion_section_2">
+                            <div class="row">
+                                @foreach (var item in Model.ListSanPham)
+                                {
+                                    <div class="col-lg-4 col-sm-4">
+                                        <div class="box_main">
+                                            <h4 class="shirt_text">@item.TenSanPham</h4>
+                                            <p class="price_text">Price  <span style="color: #262626;">@item.DonGiaBanNhoNhat</span></p>
+                                            <div class="tshirt_img"><img src="~/Content/images/@item.AnhDaiDien"></div>
+                                            <div class="btn_main">
+                                                <div class="buy_bt"><a href="#">Buy Now</a></div>
+                                                <div class="seemore_bt"><a href="#">See More</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function showByCategory(geturl) {
+            let str = `<div class="d-flex flex-wrap">`;
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: geturl,
+                success: function (data) {
+                    $.each(data, function (key, val) {
+                        var linkImage = "../Content/images/" + val.AnhDaiDien;
+                        str += `<div class="col-lg-4 col-sm-4">
+                                    <div class="box_main">
+                                        <h4 class="shirt_text">${val.TenSanPham}</h4>
+                                        <p class="price_text">Price  <span style="color: #262626;">${val.DonGiaBanNhoNhat}</span></p>
+                                        <div class="tshirt_img"><img src="${linkImage}"></div>
+                                        <div class="btn_main">
+                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
+                                            <div class="seemore_bt"><a href="#">See More</a></div>
+                                        </div>
+                                    </div>
+                                </div>`
+                    });
+                    str += `</div>`;
+                    $('#displayProduct').html(str);
+                },
+                error: function (xhr) {
+                    alert(xhr.reponseText);
+                }
+            });
+
+        }
+    </script>
+    
+    
+    }
