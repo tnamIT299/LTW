@@ -1,0 +1,46 @@
+garyseager191999@hotmail.com
+TaiKhoanCuaHungDZtao
+
+[RegularExpression(@"^\d[0-9]+$", ErrorMessage = "Vui lòng chỉ nhập số và lớn hơn 0.")]
+
+[RegularExpression(@"^[a-zA-ZÀ-Ỹà-ỹ].*" ,ErrorMessage ="Tên sản phẩm phải bắt đầu bằng 1 chữ cái")]
+
+[RegularExpression(@".*\.jpg", ErrorMessage = "Phải là tên file ảnh có chứa .jpg")]
+
+
+
+---------------AJAX----------------
+ <script>
+     function showProductByCategoty(geturl) {
+         var str = '';
+         $.ajax({
+             type: 'GET',
+             dataType: 'json',
+             url: geturl,
+             success: function (data) {
+                 $.each(data, function (key, val) {
+                     var linkImage = "../Content/img/bg-img/" + val.AnhDaiDien;
+                     str += `<div class="col-12 col-sm-6 col-lg-3 single_portfolio_item design home-design wow fadeInUp">
+                             <!-- Portfolio Thumbnail -->
+                             <div class="portfolio-thumbnail bg-img">
+                                 <img src="${linkImage}">
+                             </div>
+                             <!-- Portfolio Hover Text -->
+                             <div class="portfolio-hover-overlay">
+                                 <a href="/sanphams/details/${val.MaSanPham}" class="portfolio-img d-flex align-items-center justify-content-center" title="Portfolio 1">
+                                     <div class="port-hover-text">
+                                         <h3>${val.TenSanPham}</h3>
+                                         <h5>${val.DonGiaBanNhoNhat}</h5>
+                                     </div>
+                                 </a>
+                             </div>
+                         </div>`
+                 });
+                 $('#displayProduct').html(str);
+             },
+             error: function (xhr) {
+                 alert(xhr.reponseText);
+             }
+         });
+     }
+ </script>
