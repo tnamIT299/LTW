@@ -1,0 +1,88 @@
+﻿@model Shopper.Models.HomeModel
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="site-section block-3 site-blocks-2 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7 site-section-heading text-center pt-4">
+                <h2>Featured Products</h2>
+                @foreach (var item in Model.ListPhanLoai)
+                {
+                    var geturl = "https://localhost:44329/api/productAPI/?maloai=" + item.MaPhanLoai;
+                    <span class="mr-2"><a style="cursor:pointer" onclick="showProductByCategory('@geturl')">@item.PhanLoaiChinh</a></span>
+
+
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="displayProduct" class="nonloop-block-3 owl-carousel">
+                    @foreach (var item in Model.ListSanPham)
+                    {
+                        <div class="item">
+                            <div class="block-4 text-center">
+                                <figure class="block-4-image">
+                                    <img src="~/Content/images/@item.AnhDaiDien" alt="Image placeholder" class="img-fluid">
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="#">@item.TenSanPham</a></h3>
+                                    <p class="mb-0">Finding perfect t-shirt</p>
+                                    <p class="text-primary font-weight-bold">@item.DonGiaBanNhoNhat</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        function showProductByCategory(geturl) {
+            var str = '';
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: geturl,
+                success: function (data) {
+                    $.each(data, function (key, val) {
+                        var linkImage = "../Content/images/" + val.AnhDaiDien;
+                        str += `<div class="item">
+                                <div class="block-4 text-center">
+                                    <figure class="block-4-image">
+                                        <img src="${linkImage}" alt="Image placeholder" class="img-fluid">
+                                    </figure>
+                                    <div class="block-4-text p-4">
+                                        <h3><a href="#">${val.TenSanPham}</a></h3>
+                                        <p class="mb-0">Finding perfect t-shirt</p>
+                                        <p class="text-primary font-weight-bold">${val.DonGiaBanNhoNhat}</p>
+                                    </div>
+                                </div>
+                            </div>`
+
+                    });
+                    $('#displayProduct').html(str);
+                },
+                error: function (xhr) {
+                    alert(xhr.reponseText);
+                }
+
+            });
+
+
+        }
+
+
+    </script>
+
+} 
