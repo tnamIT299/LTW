@@ -10,12 +10,17 @@
         <div class="row justify-content-center mb-3 pb-3">
             <div class="col-md-12 heading-section text-center ftco-animate">
                 <h2 class="mb-4">New Shoes Arrival</h2>
-                @foreach (var item in Model.ListPhanLoaiPhu)
-                {
-                    var geturl = "https://localhost:44319/api/productapi/?maloai=" + item.MaPhanLoaiPhu;
-                <p><a style="cursor:pointer" onclick="showProductbyCategory('@geturl')">@item.TenPhanLoaiPhu
-                    </a></p>
+                <div class="d-flex flex-wrapm justify-content-center align-content-around">
+                    @foreach (var item in Model.ListPhanLoaiPhu)
+                    {
+                        var geturl = "https://localhost:44319/api/productapi/?maloai=" + item.MaPhanLoaiPhu;
+                        <span class="mr-2">
+                            <a style="cursor:pointer" onclick="showProductbyCategory('@geturl')">
+                                @item.TenPhanLoaiPhu
+                        </a>
+                    </span>
                 }
+                </div>
             </div>
 
         </div>
@@ -28,7 +33,7 @@
             @foreach (var item in Model.ListSanPham)
             {
              <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-                <div class="product d-flex flex-column">
+                <div class="product">
                     <a href="#" class="img-prod">
                         <img class="img-fluid" src="~/Content/images/@item.AnhDaiDien" alt="Colorlib Template">
                         <div class="overlay"></div>
@@ -77,14 +82,14 @@
                     $.each(data, function (key, val) {
                         var linkImage = "../Content/images/"+val.AnhDaiDien;
                         str += `<div class="col-sm-12 col-md-6 col-lg-3 d-flex">
-                                <div class="product d-flex flex-column">
+                                <div class="product">
                                     <a href="#" class="img-prod">
                                         <img class="img-fluid" src="${linkImage}" alt="Colorlib Template">
                                         <div class="overlay"></div>
                                     </a>
                                     <div class="text py-3 pb-4 px-3">
                                         <div class="d-flex">
-                                            <div class="cat">
+                                            <div class="cat">   
                                                 <span>Lifestyle</span>
                                             </div>
                                             <div class="rating">
