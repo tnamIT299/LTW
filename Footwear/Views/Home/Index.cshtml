@@ -1,0 +1,83 @@
+﻿@model Footwear.Models.HomeModel
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="colorlib-product">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
+                <h2>Best Sellers</h2>
+             @foreach(var item in Model.ListPhanLoaiPhu)
+             {
+                 var geturl = "https://localhost:44359/api/ProductAPI/?maloai=" + item.MaPhanLoaiPhu;
+
+                  <h4>
+                <a style="cursor:pointer" onclick="showByCategory('@geturl')">@item.TenPhanLoaiPhu</a>
+                </h4>
+            }
+            </div>
+        </div>
+        <div id ="displayProduct" class="row row-pb-md">
+            @foreach (var item in Model.ListSanPham)
+            {
+            <div class="col-lg-3 mb-4 text-center">
+                <div class="product-entry border">
+                    <a href="#" class="prod-img">
+                        <img src="~/Content/images/@item.AnhDaiDien" class="img-fluid" alt="Free html5 bootstrap 4 template">
+                    </a>
+                    <div class="desc">
+                        <h2><a href="#">@item.TenSanPham</a></h2>
+                        <span class="price">@item.DonGiaBanNhoNhat</span>
+                    </div>
+                </div>
+            </div>
+            }
+
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p><a href="#" class="btn btn-primary btn-lg">Shop All Products</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function showByCategory(geturl) {
+            var str = '';
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: geturl,
+                success: function (data) {
+                    $.each(data, function (key, val) {
+                        var linkImage = "../Content/images/" + val.AnhDaiDien;
+                        str += ` <div class="col-lg-3 mb-4 text-center">
+                                <div class="product-entry border">
+                                    <a href="#" class="prod-img">
+                                        <img src="${linkImage}" class="img-fluid" alt="Free html5 bootstrap 4 template">
+                                    </a>
+                                    <div class="desc">
+                                        <h2><a href="#">${val.TenSanPham}</a></h2>
+                                        <span class="price">${val.DonGiaBanNhoNhat}</span>
+                                    </div>
+                                </div>
+                            </div>`
+                    });
+                    $('#displayProduct').html(str);
+                },
+                error: function (xhr) {
+                    alert(xhr.reponseText);
+                }
+            });
+        }
+    </script>
+    
+    
+    
+    }
